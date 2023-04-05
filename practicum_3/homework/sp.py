@@ -1,16 +1,34 @@
 from typing import Any
 
 import networkx as nx
+from queue import PriorityQueue
+import numpy as np
 
 from src.plotting import plot_graph
 
 
 def dijkstra_sp(G: nx.Graph, source_node="0") -> dict[Any, list[Any]]:
     shortest_paths = {}  # key = destination node, value = list of intermediate nodes
+    shortest_paths[source_node] = [source_node]
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
+    q = PriorityQueue()
+    q.put((0, source_node))
+
+    visited = []
+    distance = {n: np.inf for n in G.nodes}
+    distance[source_node] = 0
+    
+    while not q.empty():
+        dist, node = q.get()
+        if node not in visited:
+            visited.append(node)
+        for neighbour in G.neighbors(node):
+            if neighbour not in visited: 
+                newdist = dist + G.edges[neighbour, node]['weight']
+                if newdist < distance[neighbour]:
+                    distance[neighbour] = newdist
+                    shortest_paths[neighbour] = [neighbour] + shortest_paths[node]
+                    q.put((distance[neighbour], neighbour))
 
     return shortest_paths
 
