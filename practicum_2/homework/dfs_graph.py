@@ -1,4 +1,4 @@
-import queue
+from queue import LifoQueue
 from typing import Any
 
 import networkx as nx
@@ -13,18 +13,32 @@ def visit(node: Any):
 def dfs_iterative(G: nx.Graph, node: Any):
     visited = {n: False for n in G}
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
+    q = LifoQueue()
+    q.put(node)
 
-
+    while not q.empty():
+        node = q.get()
+        if not visited[node]:
+            visit(node)
+            visited[node] = True
+            for neighbour in G.neighbors(node):
+                q.put(neighbour)
+    
 def topological_sort(G: nx.DiGraph, node: Any):
     visited = {n: False for n in G}
+    q = LifoQueue()
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
+    def recursive_top_sort(node):
+        visited[node] = True
+        for neighbour in G.neighbors(node):
+            if not visited[neighbour]:
+                recursive_top_sort(neighbour)
+        q.put(node)
 
+    recursive_top_sort(node)
+    while not q.empty():
+        node = q.get()
+        visit(node)
 
 if __name__ == "__main__":
     # Load and plot the graph
