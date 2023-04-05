@@ -1,5 +1,5 @@
 from time import perf_counter
-
+from queue import Queue
 
 class Maze:
     def __init__(self, list_view: list[list[str]]) -> None:
@@ -35,13 +35,28 @@ class Maze:
                     print(f"{sym} ", end="")
             print()  # linebreak
 
+def possible_move(maze: Maze, i: int, j: int) -> bool:
+    if (maze.list_view[i][j] != "#") and (i >=0) and (j >= 0):
+        return True
+    return False
 
 def solve(maze: Maze) -> None:
     path = ""  # solution as a string made of "L", "R", "U", "D"
 
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
+    q = Queue()
+    q.put((0, maze.start_j, ""))
+    visited_vertex = []
+
+    while q:
+        I, J, path = q.get()
+        if maze.list_view[I][J] == 'X':
+            break
+        if (I, J) not in visited_vertex:
+            visited_vertex.append((I, J))
+            for move in ["L", "R", "U", "D"]:
+                new_I, new_J = _shift_coordinate(I, J, move)
+                if possible_move(maze, new_I, new_J):
+                    q.put((new_I, new_J, path + move))
 
     print(f"Found: {path}")
     maze.print(path)
