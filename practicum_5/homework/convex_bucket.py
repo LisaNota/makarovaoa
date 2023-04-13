@@ -2,6 +2,7 @@ from time import perf_counter
 
 import numpy as np
 from numpy.typing import NDArray
+from functools import cmp_to_key
 
 from src.plotting import plot_points
 
