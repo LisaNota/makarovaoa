@@ -31,7 +31,7 @@ class DoublyLinkedList:
     def empty(self):
         return self.head is None
 
-    def search(self, k: Element) -> Element:
+    def search(self, k: Element) -> Optional[Element]:
         """Complexity: O(n)"""
         x = self.head
         while (x is not None) and (x.key != k.key):
@@ -120,7 +120,7 @@ if __name__ == "__main__":
     # e = l.search(Element(key=3))
     # l.remove(e)
 
-    with open("practicum_4/add_two_numbers_cases.yaml", "r") as f:
+    with open("practicum_6/add_two_numbers_cases.yaml", "r") as f:
         cases = yaml.safe_load(f)
 
     for c in cases:
