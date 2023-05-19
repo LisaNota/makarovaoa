@@ -3,17 +3,31 @@ from numpy.typing import NDArray
 
 
 def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
-    pass
+    n = len(A)
+    L = np.eye(n)
+    P = np.eye(n)
+    U = A.copy()
+    
+    for j in range(n):
+        row = max(range(j, n), key=lambda i: abs(U[i, j]))
+        
+        if j != row:
+            P[[j, row]] = P[[row, j]]
+            L[[j, row], :j] = L[[row, j], :j] 
+            U[[j, row], :] = U[[row, j], :]
+        
+        L[j:, j] = U[j:, j] / U[j, j]
+        U[j+1:, j:] -= L[j+1:, j, np.newaxis] * U[j, j:]
+        
+    return L, U, P
 
 
 def solve(L: NDArray, U: NDArray, P: NDArray, b: NDArray) -> NDArray:
-    ##########################
-    ### PUT YOUR CODE HERE ###
-    ##########################
-    pass
+    # LUx = Pb
+    A = np.matmul(L, U)
+    B = np.matmul(P, b)
+    x = np.linalg.solve(A, B)
+    return x
 
 
 def get_A_b(a_11: float, b_1: float) -> tuple[NDArray, NDArray]:
