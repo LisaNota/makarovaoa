@@ -20,9 +20,10 @@ def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
 
 def solve(L: NDArray, U: NDArray, P: NDArray, b: NDArray) -> NDArray:
     # LUx = Pb
-    A = np.matmul(L, U)
-    B = np.matmul(P, b)
-    x = np.linalg.solve(A, B)
+    # x = U^-1 L^-1 P b
+    y = np.matmul(np.linalg.inv(U), np.linalg.inv(L))
+    z = np.matmul(y, P)
+    x = np.matmul(z, b)
     return x
 
 
