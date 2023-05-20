@@ -7,18 +7,14 @@ def lu(A: NDArray, permute: bool) -> tuple[NDArray, NDArray, NDArray]:
     L = np.eye(n)
     P = np.eye(n)
     U = A.copy()
-    
     for j in range(n):
-        row = max(range(j, n), key=lambda i: abs(U[i, j]))
-        
-        if j != row:
-            P[[j, row]] = P[[row, j]]
-            L[[j, row], :j] = L[[row, j], :j] 
-            U[[j, row], :] = U[[row, j], :]
-        
+        row_index = max(range(j, n), key=lambda i: abs(U[i, j]))
+        if j != row_index:
+            P[[j, row_index]] = P[[row_index, j]]
+            L[[j, row_index], :j] = L[[row_index, j], :j]
+            U[[j, row_index], :] = U[[row_index, j], :]
         L[j:, j] = U[j:, j] / U[j, j]
         U[j+1:, j:] -= L[j+1:, j, np.newaxis] * U[j, j:]
-        
     return L, U, P
 
 
